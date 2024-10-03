@@ -1,0 +1,6 @@
+@LessonApiBiblioteka_HostAddress = http://localhost:5084
+
+GET {{LessonApiBiblioteka_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
