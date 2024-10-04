@@ -12,5 +12,7 @@ namespace LessonApiBiblioteka.DataBaseContext
         public DbSet<BookModel> Book { get; set; }
         public DbSet<AuthorModel> Author { get; set; }
         public DbSet<GenreModel> Genre { get; set; }
+        public DbSet<ReaderModel> Reader { get; set; }
+        public DbSet<BookRentalModel> Rental { get; set; }
     }
 }

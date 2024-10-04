@@ -1,6 +1,6 @@
 ﻿namespace LessonApiBiblioteka.Requests
 {
-    public class UpdateAuthorRequest
+    public class AuthorRequest
     {
         public int Id_Author { get; set; }
         public string FirstName { get; set; }

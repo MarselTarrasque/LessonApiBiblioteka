@@ -10,8 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<LibraryApiDb>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryDbString")));
+builder.Services.AddDbContext<LibraryApiDb>(options =>  
+options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryDbString")), ServiceLifetime.Scoped);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

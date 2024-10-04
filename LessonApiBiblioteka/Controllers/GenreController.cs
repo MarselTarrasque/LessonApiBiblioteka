@@ -21,63 +21,89 @@ namespace LessonApiBiblioteka.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllGenres()
         {
-            var genres = await _context.Genre.ToListAsync();
-            return Ok(genres);
+            try
+            {
+                var genres = await _context.Genre.ToListAsync();
+                return Ok(genres);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
+            }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetGenreById(int id)
-        {
-            var genre = await _context.Genre.FindAsync(id);
-            if (genre == null)
-            {
-                return NotFound();
-            }
-            return Ok(genre);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGenre(CreateNewGenreRequest newGenre)
+        public async Task<IActionResult> CreateGenre([FromQuery] GenreRequest newGenre)
         {
-            var genre = new GenreModel
+            if (!ModelState.IsValid)
             {
-                Name = newGenre.Name
-            };
+                return BadRequest(ModelState);
+            }
 
-            _context.Genre.Add(genre);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetGenreById), new { id = genre.Id_Genre }, genre);
+            try
+            {
+                var genre = new GenreModel
+                {
+                    Name = newGenre.Name
+                };
+
+                _context.Genre.Add(genre);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetAllGenres), new { id = genre.Id_Genre }, genre);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGenre(int id, UpdateGenreRequest updateGenre)
+        public async Task<IActionResult> UpdateGenre(int id, [FromQuery] GenreRequest updateGenre)
         {
-            var genre = await _context.Genre.FindAsync(id);
-            if (genre == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            genre.Name = updateGenre.Name;
+            try
+            {
+                var genre = await _context.Genre.FindAsync(id);
+                if (genre == null)
+                {
+                    return NotFound("Жанр с указанным идентификатором не найден.");
+                }
 
-            await _context.SaveChangesAsync();
+                genre.Name = updateGenre.Name;
 
-            return NoContent();
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGenre(int id)
+        public async Task<IActionResult> DeleteGenre( int id)
         {
-            var genre = await _context.Genre.FindAsync(id);
-            if (genre == null)
+            try
             {
-                return NotFound();
+                var genre = await _context.Genre.FindAsync(id);
+                if (genre == null)
+                {
+                    return NotFound("Жанр с указанным идентификатором не найден.");
+                }
+
+                _context.Genre.Remove(genre);
+                await _context.SaveChangesAsync();
+                return NoContent();
             }
-
-            _context.Genre.Remove(genre);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
+            }
         }
     }
 }

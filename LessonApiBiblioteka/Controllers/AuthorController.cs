@@ -9,9 +9,17 @@ namespace LessonApiBiblioteka.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    
+
     public class AuthorController : ControllerBase
     {
-        private readonly LibraryApiDb _context;
+        public class AuthorRequestWithoutId
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            // Нет поля ID
+        }
+        readonly LibraryApiDb _context;
 
         public AuthorController(LibraryApiDb context)
         {
@@ -37,15 +45,27 @@ namespace LessonApiBiblioteka.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor(AuthorModel author)
+        public async Task<IActionResult> CreateAuthor([FromQuery] AuthorRequestWithoutId newAuthor)
         {
-            _context.Author.Add(author);
+            var autors = new AuthorModel()
+            {
+                FirstName = newAuthor.FirstName,
+                LastName = newAuthor.LastName,
+            };
+
+            await _context.Author.AddAsync(autors);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetAuthorById), new { id = author.Id_Author }, author);
+
+            return Ok(new
+            {
+                Message = "Автор успешно создан",
+                FirstName = autors.FirstName,
+                LastName = autors.LastName
+            });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAuthor(int id, UpdateAuthorRequest updatedAuthor)
+        public async Task<IActionResult> UpdateAuthor(int id, AuthorRequest updatedAuthor)
         {
             if (id != updatedAuthor.Id_Author)
             {

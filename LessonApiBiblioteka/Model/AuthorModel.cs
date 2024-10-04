@@ -8,6 +8,5 @@ namespace LessonApiBiblioteka.Model
         public int Id_Author { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ICollection<BookModel> Books { get; set; }
     }
 }

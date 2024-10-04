@@ -1,6 +1,6 @@
 ﻿namespace LessonApiBiblioteka.Requests
 {
-    public class UpdateGenreRequest
+    public class GenreRequest
     {
         public string Name { get; set; }
     }

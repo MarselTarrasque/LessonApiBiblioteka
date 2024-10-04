@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LessonApiBiblioteka.Controllers;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LessonApiBiblioteka.Model
@@ -11,12 +12,12 @@ namespace LessonApiBiblioteka.Model
         public int YearPublished_Book { get; set; }
         public string Description_Book { get; set; }
         public int AvailableCopies { get; set; }
-        [ForeignKey("GenreModel")]
-        public int Genre_Id;
+        [ForeignKey("Genre")]
+        public int Genre_Id { get; set; }
         public GenreModel Genre { get; set; }
-        [ForeignKey("AuthorModel")]
-        public int Author_Id;
+
+        [ForeignKey("Author")]
+        public int Author_Id { get; set; }
         public AuthorModel Author { get; set; }
-        
-    }
+    } 
 }

@@ -8,10 +8,9 @@ namespace LessonApiBiblioteka.Model
         public int Id_Reader { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public string ContactInfo { get; set; }
-
-        // Связь с арендованными книгами
-        public ICollection<RentalModel> Rentals { get; set; }
     }
 }
